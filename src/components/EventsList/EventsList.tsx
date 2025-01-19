@@ -1,26 +1,26 @@
-import { CalendarEvent } from '../../types/'
+import { useEventsContext } from '../../contexts/EventsContext'
+import { useFormContext } from '../../contexts/FormContext'
 import { EventCard } from './EventCard'
 
-interface EventsListProps {
-  events: CalendarEvent[]
-  onEdit: (event: CalendarEvent) => void
-  onDelete: (id: string, recurringId?: string) => void
-}
+export const EventsList = () => {
+  const { filteredEvents, deleteEvent } = useEventsContext()
+  const { formActions } = useFormContext()
 
-export const EventsList = ({ events, onEdit, onDelete }: EventsListProps) => (
-  <div className="events-list">
-    <h2>Upcoming Events</h2>
-    {events.length === 0 ? (
-      <p>No events found</p>
-    ) : (
-      events.map((event) => (
-        <EventCard
-          key={event.id}
-          event={event}
-          onEdit={onEdit}
-          onDelete={onDelete}
-        />
-      ))
-    )}
-  </div>
-)
+  return (
+    <div className="events-list">
+      <h2>Upcoming Events</h2>
+      {filteredEvents.length === 0 ? (
+        <p>No events found</p>
+      ) : (
+        filteredEvents.map((event) => (
+          <EventCard
+            key={event.id}
+            event={event}
+            onEdit={formActions.startEditing}
+            onDelete={deleteEvent}
+          />
+        ))
+      )}
+    </div>
+  )
+}

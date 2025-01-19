@@ -1,49 +1,21 @@
 import { CalendarEvent } from '../../types/'
+import { useFormContext } from '../../contexts/FormContext'
 
-interface EventFormProps {
-  onSubmit: (e: React.FormEvent) => void
-  editingEvent: CalendarEvent | null
-  formData: {
-    selectedDate: string
-    title: string
-    description: string
-    category: string
-    recurrence: CalendarEvent['recurrence']
-    reminder: boolean
-    reminderTime: string
-  }
-  onFormChange: {
-    setSelectedDate: (value: string) => void
-    setTitle: (value: string) => void
-    setDescription: (value: string) => void
-    setCategory: (value: string) => void
-    setRecurrence: (value: CalendarEvent['recurrence']) => void
-    setReminder: (value: boolean) => void
-    setReminderTime: (value: string) => void
-  }
-  onCancel: () => void
-}
-
-export const EventForm = ({
-  onSubmit,
-  editingEvent,
-  formData,
-  onFormChange,
-  onCancel
-}: EventFormProps) => {
+export const EventForm = () => {
+  const { formState, formHandlers, formActions } = useFormContext()
   const categories = ['Work', 'Personal', 'Family', 'Health', 'Other']
 
   return (
-    <form onSubmit={onSubmit} className="event-form">
-      <h2>{editingEvent ? 'Edit Event' : 'Add New Event'}</h2>
+    <form onSubmit={formActions.handleSubmit} className="event-form">
+      <h2>{formState.editingEvent ? 'Edit Event' : 'Add New Event'}</h2>
 
       <div>
         <label htmlFor="date">Date:</label>
         <input
           type="date"
           id="date"
-          value={formData.selectedDate}
-          onChange={(e) => onFormChange.setSelectedDate(e.target.value)}
+          value={formState.selectedDate}
+          onChange={(e) => formHandlers.setSelectedDate(e.target.value)}
           required
         />
       </div>
@@ -53,8 +25,8 @@ export const EventForm = ({
         <input
           type="text"
           id="title"
-          value={formData.title}
-          onChange={(e) => onFormChange.setTitle(e.target.value)}
+          value={formState.title}
+          onChange={(e) => formHandlers.setTitle(e.target.value)}
           required
           placeholder="Enter event title"
         />
@@ -64,8 +36,8 @@ export const EventForm = ({
         <label htmlFor="category">Category:</label>
         <select
           id="category"
-          value={formData.category}
-          onChange={(e) => onFormChange.setCategory(e.target.value)}
+          value={formState.category}
+          onChange={(e) => formHandlers.setCategory(e.target.value)}
           className="category-select"
         >
           <option value="">Select a category</option>
@@ -81,8 +53,8 @@ export const EventForm = ({
         <label htmlFor="description">Description:</label>
         <textarea
           id="description"
-          value={formData.description}
-          onChange={(e) => onFormChange.setDescription(e.target.value)}
+          value={formState.description}
+          onChange={(e) => formHandlers.setDescription(e.target.value)}
           placeholder="Enter event description"
         />
       </div>
@@ -91,9 +63,9 @@ export const EventForm = ({
         <label htmlFor="recurrence">Recurrence:</label>
         <select
           id="recurrence"
-          value={formData.recurrence}
+          value={formState.recurrence}
           onChange={(e) =>
-            onFormChange.setRecurrence(
+            formHandlers.setRecurrence(
               e.target.value as CalendarEvent['recurrence']
             )
           }
@@ -112,20 +84,20 @@ export const EventForm = ({
           <input
             type="checkbox"
             id="reminder"
-            checked={formData.reminder}
-            onChange={(e) => onFormChange.setReminder(e.target.checked)}
+            checked={formState.reminder}
+            onChange={(e) => formHandlers.setReminder(e.target.checked)}
           />
           <label htmlFor="reminder">Set Reminder</label>
         </div>
 
-        {formData.reminder && (
+        {formState.reminder && (
           <div className="reminder-time">
             <label htmlFor="reminderTime">Reminder Time:</label>
             <input
               type="time"
               id="reminderTime"
-              value={formData.reminderTime}
-              onChange={(e) => onFormChange.setReminderTime(e.target.value)}
+              value={formState.reminderTime}
+              onChange={(e) => formHandlers.setReminderTime(e.target.value)}
               required
             />
           </div>
@@ -133,11 +105,15 @@ export const EventForm = ({
       </div>
 
       <div className="form-buttons">
-        <button type="submit">
-          {editingEvent ? 'Update Event' : 'Add Event'}
+        <button type="submit" onClick={formActions.handleSubmit}>
+          {formState.editingEvent ? 'Update Event' : 'Add Event'}
         </button>
-        {editingEvent && (
-          <button type="button" onClick={onCancel} className="cancel-btn">
+        {formState.editingEvent && (
+          <button
+            type="button"
+            onClick={formActions.cancelEditing}
+            className="cancel-btn"
+          >
             Cancel
           </button>
         )}

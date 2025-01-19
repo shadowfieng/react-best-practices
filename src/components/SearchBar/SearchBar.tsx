@@ -1,16 +1,17 @@
-interface SearchBarProps {
-  searchTerm: string
-  onSearchChange: (value: string) => void
-}
+import { useEventsContext } from '../../contexts/EventsContext'
 
-export const SearchBar = ({ searchTerm, onSearchChange }: SearchBarProps) => (
-  <div className="search-bar">
-    <input
-      type="text"
-      placeholder="Search events..."
-      value={searchTerm}
-      onChange={(e) => onSearchChange(e.target.value)}
-      className="search-input"
-    />
-  </div>
-)
+export const SearchBar = () => {
+  const { searchTerm, setSearchTerm } = useEventsContext()
+
+  return (
+    <div className="search-bar">
+      <input
+        type="text"
+        placeholder="Search events..."
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+        className="search-input"
+      />
+    </div>
+  )
+}
