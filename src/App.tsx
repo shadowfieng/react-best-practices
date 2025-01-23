@@ -1,10 +1,11 @@
 import './App.css'
-import UserTable from './UserTable'
+import MouseTracker from './MouseTracker'
 
 function App() {
   return (
     <>
-      <UserTable />
+      {/* <UserTable /> */}
+      <MouseTracker />
     </>
   )
 }
