@@ -50,7 +50,9 @@ const MouseTracker = () => {
       </p>
       <p>Last Key Pressed: {keyPressed}</p>
 
-      <button onClick={() => abortControllerRef.current?.abort()}>
+      <button
+        onClick={() => abortControllerRef.current?.abort('Detached events')}
+      >
         Detach Event Listeners
       </button>
     </div>
