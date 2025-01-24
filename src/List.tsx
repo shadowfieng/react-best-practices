@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { Fragment, useState } from 'react'
 
 type Props<T> = {
   title: string
@@ -6,7 +6,11 @@ type Props<T> = {
   renderItem: (item: T, index: number, array: T[]) => React.ReactNode
 }
 
-export const List = <T,>({ title, items, renderItem }: Props<T>) => {
+export const List = <T extends { id: number }>({
+  title,
+  items,
+  renderItem
+}: Props<T>) => {
   const [isOpen, setIsOpen] = useState(true)
   const [isCollapsed, setIsCollapsed] = useState(false)
 
@@ -25,7 +29,17 @@ export const List = <T,>({ title, items, renderItem }: Props<T>) => {
           {isOpen ? <span>&or;</span> : <span>&and;</span>}
         </button>
       </div>
-      {isOpen && <ul className="list">{displayItems.map(renderItem)}</ul>}
+      {isOpen && (
+        <ul className="list">
+          {displayItems.map((item, index, array) => {
+            return (
+              <Fragment key={item.id}>
+                {renderItem(item, index, array)}
+              </Fragment>
+            )
+          })}
+        </ul>
+      )}
       <button
         className="toggle-button"
         onClick={() => setIsCollapsed((prev) => !prev)}

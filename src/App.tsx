@@ -5,26 +5,30 @@ import { List } from './List'
 import withToggles from './withToggle'
 
 type Product = {
+  id: number
   productName: string
   description: string
   price: string
 }
 
 type Company = {
+  id: number
   companyName: string
   phrase: string
 }
 
-const products = Array.from({ length: 20 }, (): Product => {
+const products = Array.from({ length: 20 }, (_, index): Product => {
   return {
+    id: index,
     productName: faker.commerce.productName(),
     description: faker.commerce.productDescription(),
     price: faker.commerce.price()
   }
 })
 
-const companies = Array.from({ length: 15 }, () => {
+const companies = Array.from({ length: 15 }, (_, index) => {
   return {
+    id: index,
     companyName: faker.company.name(),
     phrase: faker.company.catchPhrase()
   }
